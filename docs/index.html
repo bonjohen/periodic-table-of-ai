@@ -406,12 +406,261 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* ===== Chemical Periodic Table Styles ===== */
+    .element-table {
+      display: grid;
+      grid-template-columns: 220px repeat(5, 1fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-top: 32px;
+    }
+
+    .element-table .cell {
+      background: #ffffff;
+      border: 1px solid #D1D5DB;
+      border-radius: 12px;
+      padding: 18px 18px;
+      min-height: 150px;
+      position: relative;
+      box-sizing: border-box;
+      cursor: help;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .element-table .cell:not(.empty):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .element-table .cell.empty {
+      background: transparent;
+      border: 1px solid #E5E7EB;
+    }
+
+    .config {
+      margin-top: 8px;
+      font-size: 13px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #6B7280;
+    }
+
+    .element-table .col-header {
+      text-align: center;
+      font-weight: 700;
+      padding: 18px 12px;
+      border-radius: 10px;
+      color: #ffffff;
+      letter-spacing: 0.03em;
+      font-size: 15px;
+      cursor: help;
+      transition: transform 0.2s ease;
+    }
+
+    .element-table .col-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .element-table .row-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px 12px 24px;
+      font-weight: 700;
+      font-size: 17px;
+      color: #374151;
+      white-space: nowrap;
+      position: relative;
+      background: linear-gradient(to right, #E5E7EB 0%, #E5E7EB calc(100% - 20px), transparent calc(100% - 20px));
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+      cursor: help;
+    }
+
+    .element-table .row-header::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: #E5E7EB;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    /* Chemical element type colors - matching AI table style */
+    .element-table .tetrels {
+      background: #E8F1FA;
+      border-color: #2563EB;
+    }
+
+    .element-table .pnictogens {
+      background: #E6F7F4;
+      border-color: #0D9488;
+    }
+
+    .element-table .chalcogens {
+      background: #F1ECF9;
+      border-color: #6D28D9;
+    }
+
+    .element-table .halogens {
+      background: #FEF3C7;
+      border-color: #D97706;
+    }
+
+    .element-table .noble-gases {
+      background: #EEF2F7;
+      border-color: #334155;
+    }
+
+    /* Column header colors for chemical table */
+    .element-table .col-header.tetrels { background: #2563EB; }
+    .element-table .col-header.pnictogens { background: #0D9488; }
+    .element-table .col-header.chalcogens { background: #6D28D9; }
+    .element-table .col-header.halogens { background: #D97706; }
+    .element-table .col-header.noble-gases { background: #334155; }
   </style>
 </head>
 
 <body>
   <div class="container">
     <h1>The Periodic Table of AI Elements</h1>
+        <div style="margin: 48px 0 32px 0; max-width: 1600px;">
+
+      <p style="font-size: 20px; line-height: 1.65; color: #374151; text-align: justify;">
+        A periodic table is arranged as a grid of rows and columns designed to reveal patterns in how elements behave and relate to one another. Columns (often called groups or families) contain elements that share similar fundamental properties and therefore tend to behave in comparable ways, even as they differ in electron configuration. Rows (often called periods) represent increasing levels of electron shells: as you move from left to right within a row, elements become more reactive while retaining the core traits of their group, and as you move downward from one row to the next, elements build similar outer electron configurations upon those above them.
+        The structure allows you to predict how elements will interact, combine, or evolve based on their position, rather than treating each element as an isolated case.
+      </p>
+    </div>
+
+
+
+    <div class="element-table">
+      <div class="corner"></div>
+      <div class="col-header tetrels" title="Group 14 - Tetrels (Carbon group): Elements with four valence electrons. Includes carbon, the basis of organic chemistry, and silicon, essential for semiconductors.">Tetrels</div>
+      <div class="col-header pnictogens" title="Group 15 - Pnictogens (Nitrogen group): Elements with five valence electrons. Includes nitrogen, essential for life, and phosphorus, found in DNA and ATP.">Pnictogens</div>
+      <div class="col-header chalcogens" title="Group 16 - Chalcogens (Oxygen group): Elements with six valence electrons. Includes oxygen, essential for respiration, and sulfur, important for proteins.">Chalcogens</div>
+      <div class="col-header halogens" title="Group 17 - Halogens: Highly reactive nonmetals with seven valence electrons. Form salts when combined with metals. Include fluorine and chlorine.">Halogens</div>
+      <div class="col-header noble-gases" title="Group 18 - Noble Gases: Chemically inert elements with complete valence electron shells. Extremely stable and rarely form compounds.">Noble gases</div>
+
+      <div class="row-header" title="Period 1: The first and simplest period, containing only hydrogen and helium. Elements have electrons in the first shell (n=1).">Period 1</div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell noble-gases" title="Helium (He) - Atomic Number: 2 - A colorless, odorless, tasteless, non-toxic, inert noble gas. Second lightest element and second most abundant in the observable universe.">
+        <div class="symbol">He</div>
+        <div class="name">Helium</div>
+        <div class="config">1s²</div>
+      </div>
+
+      <div class="row-header" title="Period 2: Elements with electrons filling the second shell (n=2). Includes essential elements for life like carbon, nitrogen, and oxygen.">Period 2</div>
+      <div class="cell tetrels" title="Carbon (C) - Atomic Number: 6 - The basis of all known life on Earth. Forms more compounds than any other element, with almost ten million compounds described to date.">
+        <div class="symbol">C</div>
+        <div class="name">Carbon</div>
+        <div class="config">[He] 2s² 2p²</div>
+      </div>
+      <div class="cell pnictogens" title="Nitrogen (N) - Atomic Number: 7 - Makes up about 78% of Earth's atmosphere. Essential component of amino acids and nucleic acids, vital for all living organisms.">
+        <div class="symbol">N</div>
+        <div class="name">Nitrogen</div>
+        <div class="config">[He] 2s² 2p³</div>
+      </div>
+      <div class="cell chalcogens" title="Oxygen (O) - Atomic Number: 8 - Most abundant element in Earth's crust and essential for cellular respiration in most living organisms. Makes up about 21% of Earth's atmosphere.">
+        <div class="symbol">O</div>
+        <div class="name">Oxygen</div>
+        <div class="config">[He] 2s² 2p⁴</div>
+      </div>
+      <div class="cell halogens" title="Fluorine (F) - Atomic Number: 9 - The most electronegative and reactive of all elements. A pale yellow-green gas that is highly toxic and corrosive.">
+        <div class="symbol">F</div>
+        <div class="name">Fluorine</div>
+        <div class="config">[He] 2s² 2p⁵</div>
+      </div>
+      <div class="cell noble-gases" title="Neon (Ne) - Atomic Number: 10 - A colorless, odorless, inert noble gas. Produces the distinctive reddish-orange glow in neon signs and vacuum discharge tubes.">
+        <div class="symbol">Ne</div>
+        <div class="name">Neon</div>
+        <div class="config">[He] 2s² 2p⁶</div>
+      </div>
+
+      <div class="row-header" title="Period 3: Elements with electrons filling the third shell (n=3). Includes silicon, phosphorus, sulfur, and chlorine - important for technology and biology.">Period 3</div>
+      <div class="cell tetrels" title="Silicon (Si) - Atomic Number: 14 - Second most abundant element in Earth's crust. The basis of semiconductor technology and essential for modern electronics.">
+        <div class="symbol">Si</div>
+        <div class="name">Silicon</div>
+        <div class="config">[Ne] 3s² 3p²</div>
+      </div>
+      <div class="cell pnictogens" title="Phosphorus (P) - Atomic Number: 15 - Essential for life, found in DNA, RNA, and ATP. Exists in several allotropic forms including white, red, and black phosphorus.">
+        <div class="symbol">P</div>
+        <div class="name">Phosphorus</div>
+        <div class="config">[Ne] 3s² 3p³</div>
+      </div>
+      <div class="cell chalcogens" title="Sulfur (S) - Atomic Number: 16 - The tenth most abundant element in the universe. Essential for life and used in many industrial processes including fertilizer production.">
+        <div class="symbol">S</div>
+        <div class="name">Sulfur</div>
+        <div class="config">[Ne] 3s² 3p⁴</div>
+      </div>
+      <div class="cell halogens" title="Chlorine (Cl) - Atomic Number: 17 - A yellow-green gas at room temperature. Widely used for water purification and as a disinfectant. Highly reactive halogen.">
+        <div class="symbol">Cl</div>
+        <div class="name">Chlorine</div>
+        <div class="config">[Ne] 3s² 3p⁵</div>
+      </div>
+      <div class="cell noble-gases" title="Argon (Ar) - Atomic Number: 18 - Makes up about 0.93% of Earth's atmosphere. Used in welding, light bulbs, and as a protective atmosphere for growing silicon crystals.">
+        <div class="symbol">Ar</div>
+        <div class="name">Argon</div>
+        <div class="config">[Ne] 3s² 3p⁶</div>
+      </div>
+
+      <div class="row-header" title="Period 4: Elements with electrons filling the fourth shell (n=4), including the 3d subshell. Contains transition metals and heavier p-block elements like germanium and bromine.">Period 4</div>
+      <div class="cell tetrels" title="Germanium (Ge) - Atomic Number: 32 - A lustrous, hard-brittle metalloid. Important semiconductor material used in fiber optics and infrared optics.">
+        <div class="symbol">Ge</div>
+        <div class="name">Germanium</div>
+        <div class="config">[Ar] 3d¹⁰ 4s² 4p²</div>
+      </div>
+      <div class="cell pnictogens" title="Arsenic (As) - Atomic Number: 33 - A steel-grey metalloid. Toxic in its elemental form but essential in trace amounts for some organisms. Used in semiconductors and alloys.">
+        <div class="symbol">As</div>
+        <div class="name">Arsenic</div>
+        <div class="config">[Ar] 3d¹⁰ 4s² 4p³</div>
+      </div>
+      <div class="cell chalcogens" title="Selenium (Se) - Atomic Number: 34 - A nonmetal with semiconductor properties. Essential trace element for cellular function. Used in photocells and solar cells.">
+        <div class="symbol">Se</div>
+        <div class="name">Selenium</div>
+        <div class="config">[Ar] 3d¹⁰ 4s² 4p⁴</div>
+      </div>
+      <div class="cell halogens" title="Bromine (Br) - Atomic Number: 35 - One of only two elements that is liquid at room temperature. A reddish-brown fuming liquid with a pungent odor. Used in flame retardants.">
+        <div class="symbol">Br</div>
+        <div class="name">Bromine</div>
+        <div class="config">[Ar] 3d¹⁰ 4s² 4p⁵</div>
+      </div>
+      <div class="cell noble-gases" title="Krypton (Kr) - Atomic Number: 36 - A colorless, odorless noble gas. Used in high-performance light bulbs and in certain types of photographic flash lamps.">
+        <div class="symbol">Kr</div>
+        <div class="name">Krypton</div>
+        <div class="config">[Ar] 3d¹⁰ 4s² 4p⁶</div>
+      </div>
+    </div>
+
+        <!-- =========================
+         CHEMICAL PERIODIC TABLE
+         ========================= -->
+    <h2 class="section-title">Periodic Table (uper right quadrant)</h2>
+    <p class="section-note">
+      This table mirrors the layout principles of the chemical periodic table.
+      Elements in the same column (group) share similar valence electron structures
+      and chemical behavior, while elements in lower rows occupy progressively
+      higher electron shells. Only Groups 14-18 and the top four periods are shown.
+    </p>
+    <!-- =========================
+         DIVIDER
+         ========================= -->
+    <hr class="divider">
+
+    <!-- =========================
+         EXPLANATORY TEXT
+         ========================= -->
+
+    <div style="margin: 48px 0 32px 0; max-width: 1600px;">
+      <p style="font-size: 20px; line-height: 1.65; color: #374151; text-align: justify;">
+        The Periodic Table of AI is a conceptual framework for organizing the rapidly expanding landscape of artificial intelligence into a small set of fundamental elements, families, and levels of composition. Its purpose is not to catalog products or hype new techniques, but to reveal the structure underlying AI systems—what the irreducible building blocks are, how they combine into stable patterns, and how more complex behaviors emerge over time. By mapping AI capabilities into rows (levels of maturity) and groups (functional roles), the table provides a common language for reasoning about system design, comparing architectures, identifying missing or unnecessary components, and distinguishing genuine innovation from recombination. Like its chemical counterpart, the table is meant to support understanding, prediction, and disciplined engineering—not memorization.
+      </p>
+    </div>
 
     <div class="table">
       <!-- Column Headers -->
@@ -536,14 +785,6 @@
       </div>
     </div>
 
-    <!-- =========================
-         EXPLANATORY TEXT
-         ========================= -->
-    <div style="margin: 48px 0 32px 0; max-width: 1600px;">
-      <p style="font-size: 20px; line-height: 1.65; color: #374151; text-align: justify;">
-        The Periodic Table of AI is a conceptual framework for organizing the rapidly expanding landscape of artificial intelligence into a small set of fundamental elements, families, and levels of composition. Its purpose is not to catalog products or hype new techniques, but to reveal the structure underlying AI systems—what the irreducible building blocks are, how they combine into stable patterns, and how more complex behaviors emerge over time. By mapping AI capabilities into rows (levels of maturity) and groups (functional roles), the table provides a common language for reasoning about system design, comparing architectures, identifying missing or unnecessary components, and distinguishing genuine innovation from recombination. Like its chemical counterpart, the table is meant to support understanding, prediction, and disciplined engineering—not memorization.
-      </p>
-    </div>
 
     <div class="definitions" style="margin: 48px 0 32px 0;">
 
@@ -1115,9 +1356,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
