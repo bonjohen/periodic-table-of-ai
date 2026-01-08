@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Periodic Table of AI Elements</title>
+
+  <!-- =========================
+       CSS SECTION
+       ========================= -->
+  <style>
+    body {
+      margin: 0;
+      background: #F9FAFB;
+      font-family: Inter, Source Sans 3, Helvetica Neue, Arial, sans-serif;
+      color: #111827;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 40px auto;
+      padding: 40px 56px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 36px;
+      font-weight: 600;
+      font-size: 38px;
+      letter-spacing: -0.01em;
+    }
+
+    h1.slides-title {
+      margin: 0 0 12px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 0 0 44px 0;
+      color: #374151;
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      margin: 56px 0 14px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .section-note {
+      margin: 0 0 28px 0;
+      color: #374151;
+      font-size: 17px;
+      line-height: 1.55;
+      max-width: 1200px;
+    }
+
+    .table {
+      display: grid;
+      grid-template-columns: 220px repeat(5, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .corner {
+      grid-column: 1 / 2;
+    }
+
+    .col-header {
+      text-align: center;
+      font-weight: 700;
+      padding: 18px 12px;
+      border-radius: 10px;
+      color: #ffffff;
+      letter-spacing: 0.03em;
+      font-size: 15px;
+    }
+
+    .row-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px 12px 24px;
+      font-weight: 700;
+      font-size: 17px;
+      color: #374151;
+      white-space: nowrap;
+      position: relative;
+      background: linear-gradient(to right, #E5E7EB 0%, #E5E7EB calc(100% - 20px), transparent calc(100% - 20px));
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+    }
+
+    .row-header::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: #E5E7EB;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    .cell {
+      background: #ffffff;
+      border: 1px solid #D1D5DB;
+      border-radius: 12px;
+      padding: 18px 18px;
+      min-height: 150px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .cell.empty {
+      background: transparent;
+      border: 1px solid #E5E7EB;
+    }
+
+    .symbol {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .desc {
+      font-size: 15px;
+      margin-top: 8px;
+      color: #374151;
+      line-height: 1.4;
+    }
+
+    .dashed {
+      border-style: dashed;
+      opacity: 0.8;
+    }
+
+    /* Family colors */
+    .reactive {
+      background: #E8F1FA;
+      border-color: #2563EB;
+    }
+
+    .retrieval {
+      background: #E6F7F4;
+      border-color: #0D9488;
+    }
+
+    .orchestration {
+      background: #F1ECF9;
+      border-color: #6D28D9;
+    }
+
+    .validation {
+      background: #FEF3C7;
+      border-color: #D97706;
+    }
+
+    .models {
+      background: #EEF2F7;
+      border-color: #334155;
+    }
+
+    .col-header.reactive { background: #2563EB; }
+    .col-header.retrieval { background: #0D9488; }
+    .col-header.orchestration { background: #6D28D9; }
+    .col-header.validation { background: #D97706; }
+    .col-header.models { background: #334155; }
+
+    /* Hover effects */
+    .col-header {
+      cursor: help;
+      transition: transform 0.2s ease;
+    }
+
+    .col-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .row-header {
+      cursor: help;
+    }
+
+    .cell {
+      cursor: help;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cell:not(.empty):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Collapsible sections */
+    .collapsible-section {
+      margin: 32px 0;
+    }
+
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      padding: 12px 0;
+      transition: color 0.2s ease;
+    }
+
+    .collapsible-header:hover {
+      color: #2563EB;
+    }
+
+    .collapsible-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .collapsible-icon {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+      color: #6B7280;
+    }
+
+    .collapsible-icon.expanded {
+      transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsible-content.expanded {
+      max-height: 2000px;
+    }
+
+    .collapsible-content ul {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #374151;
+      max-width: 1200px;
+      margin-top: 12px;
+    }
+
+    /* ===== Layout for slides section ===== */
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .grid-one {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-two { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Card ===== */
+    .card {
+      background: #ffffff;
+      border: 1px solid #D1D5DB;
+      border-radius: 16px;
+      padding: 26px 28px 28px 28px;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 21px;
+      margin: 0;
+    }
+
+    .chip {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid #D1D5DB;
+      white-space: nowrap;
+    }
+
+    .reaction {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 16px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid #D1D5DB;
+      background: #F9FAFB;
+      margin-bottom: 18px;
+    }
+
+    .reaction-text {
+      font-size: 17px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+      color: #374151;
+    }
+
+    .label {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .steps {
+      padding-left: 22px;
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .steps li {
+      margin: 10px 0;
+    }
+
+    .products {
+      margin-top: 18px;
+      font-size: 16px;
+      color: #374151;
+    }
+
+    /* ===== Comparison ===== */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .compare { grid-template-columns: 1fr; }
+    }
+
+    .compare-box {
+      border-radius: 14px;
+      border: 1px solid #D1D5DB;
+      padding: 18px;
+    }
+
+    .compare-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .why {
+      margin-top: 20px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #374151;
+    }
+
+    .divider {
+      margin: 80px 0;
+      border: none;
+      border-top: 2px solid #D1D5DB;
+    }
+
+    footer {
+      margin-top: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #6B7280;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-left {
+      text-align: left;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    footer a {
+      color: #2563EB;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>The Periodic Table of AI Elements</h1>
+
+    <div class="table">
+      <!-- Column Headers -->
+      <div class="corner"></div>
+      <div class="col-header reactive" title="Elements that directly respond to input and drive action or control flow, often influencing what the system does next.">Reactive</div>
+      <div class="col-header retrieval" title="Elements responsible for representing, storing, and recalling information across different time scales.">Retrieval</div>
+      <div class="col-header orchestration" title="Elements that coordinate multiple components, managing how data, control, and decisions flow through a system.">Orchestration</div>
+      <div class="col-header validation" title="Elements that constrain, test, or explain system behavior to ensure safety, correctness, and trustworthiness.">Validation</div>
+      <div class="col-header models" title="Core computational intelligence that performs prediction, generation, reasoning, or perception.">Models</div>
+
+      <!-- Row 1: Primitives -->
+      <div class="row-header" title="Atomic capabilities that cannot be meaningfully decomposed further. All higher-level AI systems are ultimately built from these elements.">Primitives</div>
+      <div class="cell reactive" title="Pr - Prompting: Structured instructions that condition model behavior and define task intent.">
+        <div class="symbol">Pr</div>
+        <div class="name">Prompting</div>
+        <div class="desc">Instruction input</div>
+      </div>
+      <div class="cell retrieval" title="Em - Embeddings: Numerical representations of meaning that allow semantic comparison and search.">
+        <div class="symbol">Em</div>
+        <div class="name">Embeddings</div>
+        <div class="desc">Numeric meaning representation</div>
+      </div>
+      <div class="cell orchestration" title="Pi - Pipeline Processing: Declarative node-and-edge graphs that route data and control flow without embedding business logic.">
+        <div class="symbol">Pi</div>
+        <div class="name">Pipeline Processing</div>
+        <div class="desc">Declarative execution graphs</div>
+      </div>
+
+      <div class="cell validation" title="Bt - Base Truth: Canonical data definitions and curation rules that determine what data is valid, permitted, or removable.">
+        <div class="symbol">Bt</div>
+        <div class="name">Base Truth</div>
+        <div class="desc">Canonical data authority</div>
+      </div>
+      <div class="cell models" title="Lg - Large Language Models: General-purpose models trained on large corpora to generate and reason over language.">
+        <div class="symbol">Lg</div>
+        <div class="name">Large Language Models</div>
+        <div class="desc">Foundational intelligence</div>
+      </div>
+
+      <!-- Row 2: Compositions -->
+      <div class="row-header" title="Stable combinations of primitives that perform a recognizable function, such as retrieval, tool use, or multimodal input handling.">Compositions</div>
+      <div class="cell reactive" title="Fc - Function Calling: Mechanisms that allow models to invoke external tools or APIs in a structured way.">
+        <div class="symbol">Fc</div>
+        <div class="name">Function Calling</div>
+        <div class="desc">Tool execution</div>
+      </div>
+      <div class="cell retrieval" title="Vx - Vector Databases: Storage systems optimized for similarity search over embeddings.">
+        <div class="symbol">Vx</div>
+        <div class="name">Vector Databases</div>
+        <div class="desc">Semantic store</div>
+      </div>
+      <div class="cell orchestration" title="Rg - Retrieval-Augmented Generation: A pattern that retrieves external context and injects it into model prompts.">
+        <div class="symbol">Rg</div>
+        <div class="name">RAG</div>
+        <div class="desc">Retrieval + generation</div>
+      </div>
+      <div class="cell validation" title="Gr - Guardrails: Runtime constraints that enforce safety, policy compliance, and output structure.">
+        <div class="symbol">Gr</div>
+        <div class="name">Guardrails</div>
+        <div class="desc">Runtime safety</div>
+      </div>
+      <div class="cell models" title="Mm - Multimodal Models: Models capable of processing and generating across multiple data modalities.">
+        <div class="symbol">Mm</div>
+        <div class="name">Multimodal Models</div>
+        <div class="desc">Text + image + audio</div>
+      </div>
+
+      <!-- Row 3: Deployment -->
+      <div class="row-header" title="Elements that enable AI systems to operate reliably in production environments, including adaptation, orchestration, testing, and optimization.">Deployment</div>
+      <div class="cell reactive" title="Ag - Agents: Autonomous control loops that plan, act, observe results, and adapt toward a goal.">
+        <div class="symbol">Ag</div>
+        <div class="name">Agents</div>
+        <div class="desc">Think-act-observe loops</div>
+      </div>
+      <div class="cell retrieval" title="Ft - Fine-Tuning: Adapting a base model by training it further on domain-specific data.">
+        <div class="symbol">Ft</div>
+        <div class="name">Fine-Tuning</div>
+        <div class="desc">Domain adaptation</div>
+      </div>
+      <div class="cell orchestration" title="Fw - Frameworks: Software platforms that manage orchestration, state, execution, and deployment.">
+        <div class="symbol">Fw</div>
+        <div class="name">Frameworks</div>
+        <div class="desc">System orchestration</div>
+      </div>
+      <div class="cell validation" title="Rt - Red Teaming: Adversarial testing designed to uncover vulnerabilities and failure modes.">
+        <div class="symbol">Rt</div>
+        <div class="name">Red Teaming</div>
+        <div class="desc">Adversarial testing</div>
+      </div>
+      <div class="cell models" title="Sm - Small Models: Distilled or specialized models optimized for speed, cost, or on-device use.">
+        <div class="symbol">Sm</div>
+        <div class="name">Small Models</div>
+        <div class="desc">Distilled, specialized</div>
+      </div>
+
+      <!-- Row 4: Emerging -->
+      <div class="row-header" title="Rapidly evolving capabilities that extend existing patterns or introduce new behaviors, often with incomplete best practices.">Emerging</div>
+      <div class="cell reactive dashed" title="Ma - Multi-Agent Systems: Coordinated collections of agents that collaborate or specialize to solve complex tasks.">
+        <div class="symbol">Ma</div>
+        <div class="name">Multi-Agent Systems</div>
+        <div class="desc">Coordinated agents</div>
+      </div>
+      <div class="cell retrieval dashed" title="Sy - Synthetic Data: Artificially generated training data used to augment or replace real datasets.">
+        <div class="symbol">Sy</div>
+        <div class="name">Synthetic Data</div>
+        <div class="desc">AI-generated training</div>
+      </div>
+      <div class="cell orchestration dashed" title="Ae - Adaptive Execution: Orchestration logic that dynamically adjusts execution paths, depth, or component selection at runtime based on system signals such as confidence, cost, latency, or errors.">
+        <div class="symbol">Ae</div>
+        <div class="name">Adaptive Execution</div>
+        <div class="desc">Runtime execution adaptation</div>
+      </div>
+      <div class="cell validation dashed" title="In - Interpretability: Techniques that expose internal model behavior and decision-making processes.">
+        <div class="symbol">In</div>
+        <div class="name">Interpretability</div>
+        <div class="desc">Model insight</div>
+      </div>
+      <div class="cell models dashed" title="Th - Thinking Models: Architectures that allocate additional computation to deliberate before responding.">
+        <div class="symbol">Th</div>
+        <div class="name">Thinking Models</div>
+        <div class="desc">Deliberative reasoning</div>
+      </div>
+    </div>
+
+    <!-- =========================
+         EXPLANATORY TEXT
+         ========================= -->
+    <div style="margin: 48px 0 32px 0; max-width: 1600px;">
+      <p style="font-size: 20px; line-height: 1.65; color: #374151; text-align: justify;">
+        The Periodic Table of AI is a conceptual framework for organizing the rapidly expanding landscape of artificial intelligence into a small set of fundamental elements, families, and levels of composition. Its purpose is not to catalog products or hype new techniques, but to reveal the structure underlying AI systems—what the irreducible building blocks are, how they combine into stable patterns, and how more complex behaviors emerge over time. By mapping AI capabilities into rows (levels of maturity) and groups (functional roles), the table provides a common language for reasoning about system design, comparing architectures, identifying missing or unnecessary components, and distinguishing genuine innovation from recombination. Like its chemical counterpart, the table is meant to support understanding, prediction, and disciplined engineering—not memorization.
+      </p>
+    </div>
+
+    <div class="definitions" style="margin: 48px 0 32px 0;">
+
+      <!-- =========================
+           ROW DEFINITIONS
+           ========================= -->
+      <div class="collapsible-section">
+        <div class="collapsible-header" onclick="toggleSection('row-definitions')">
+          <span class="collapsible-icon" id="row-definitions-icon">▶</span>
+          <h2>Row Definitions (Levels)</h2>
+        </div>
+        <div class="collapsible-content" id="row-definitions">
+          <ul>
+            <li><strong>Primitives:</strong> Atomic capabilities that cannot be meaningfully decomposed further. All higher-level AI systems are ultimately built from these elements.</li>
+            <li><strong>Compositions:</strong> Stable combinations of primitives that perform a recognizable function, such as retrieval, tool use, or multimodal input handling.</li>
+            <li><strong>Deployment:</strong> Elements that enable AI systems to operate reliably in production environments, including adaptation, orchestration, testing, and optimization.</li>
+            <li><strong>Emerging:</strong> Rapidly evolving capabilities that extend existing patterns or introduce new behaviors, often with incomplete best practices.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- =========================
+           GROUP DEFINITIONS
+           ========================= -->
+      <div class="collapsible-section">
+        <div class="collapsible-header" onclick="toggleSection('group-definitions')">
+          <span class="collapsible-icon" id="group-definitions-icon">▶</span>
+          <h2>Group Definitions (Families)</h2>
+        </div>
+        <div class="collapsible-content" id="group-definitions">
+          <ul>
+            <li><strong>Reactive:</strong> Elements that directly respond to input and drive action or control flow, often influencing what the system does next.</li>
+            <li><strong>Retrieval:</strong> Elements responsible for representing, storing, and recalling information across different time scales.</li>
+            <li><strong>Orchestration:</strong> Elements that coordinate multiple components, managing how data, control, and decisions flow through a system.</li>
+            <li><strong>Validation:</strong> Elements that constrain, test, or explain system behavior to ensure safety, correctness, and trustworthiness.</li>
+            <li><strong>Models:</strong> Core computational intelligence that performs prediction, generation, reasoning, or perception.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- =========================
+           ELEMENT DEFINITIONS
+           ========================= -->
+      <div class="collapsible-section">
+        <div class="collapsible-header" onclick="toggleSection('element-definitions')">
+          <span class="collapsible-icon" id="element-definitions-icon">▶</span>
+          <h2>Element Definitions</h2>
+        </div>
+        <div class="collapsible-content" id="element-definitions">
+          <ul>
+            <li><strong>Pr - Prompting:</strong> Structured instructions that condition model behavior and define task intent.</li>
+            <li><strong>Em - Embeddings:</strong> Numerical representations of meaning that allow semantic comparison and search.</li>
+            <li><strong>Pi - Pipeline Processing:</strong> Declarative node-and-edge graphs that route data and control flow without embedding business logic.</li>
+            <li><strong>Bt - Base Truth:</strong> Canonical data definitions and curation rules that determine what data is valid, permitted, or removable.</li>
+            <li><strong>Lg - Large Language Models:</strong> General-purpose models trained on large corpora to generate and reason over language.</li>
+
+            <li><strong>Fc - Function Calling:</strong> Mechanisms that allow models to invoke external tools or APIs in a structured way.</li>
+            <li><strong>Vx - Vector Databases:</strong> Storage systems optimized for similarity search over embeddings.</li>
+            <li><strong>Rg - Retrieval-Augmented Generation:</strong> A pattern that retrieves external context and injects it into model prompts.</li>
+            <li><strong>Gr - Guardrails:</strong> Runtime constraints that enforce safety, policy compliance, and output structure.</li>
+            <li><strong>Mm - Multimodal Models:</strong> Models capable of processing and generating across multiple data modalities.</li>
+
+            <li><strong>Ag - Agents:</strong> Autonomous control loops that plan, act, observe results, and adapt toward a goal.</li>
+            <li><strong>Ft - Fine-Tuning:</strong> Adapting a base model by training it further on domain-specific data.</li>
+            <li><strong>Fw - Frameworks:</strong> Software platforms that manage orchestration, state, execution, and deployment.</li>
+            <li><strong>Rt - Red Teaming:</strong> Adversarial testing designed to uncover vulnerabilities and failure modes.</li>
+            <li><strong>Sm - Small Models:</strong> Distilled or specialized models optimized for speed, cost, or on-device use.</li>
+
+            <li><strong>Ma - Multi-Agent Systems:</strong> Coordinated collections of agents that collaborate or specialize to solve complex tasks.</li>
+            <li><strong>Sy - Synthetic Data:</strong> Artificially generated training data used to augment or replace real datasets.</li>
+            <li><strong>In - Interpretability:</strong> Techniques that expose internal model behavior and decision-making processes.</li>
+            <li><strong>Ae - Adaptive Execution:</strong> Orchestration logic that dynamically adjusts execution paths, depth, or component selectionat runtime based on system signals such as confidence, cost, latency, or errors.</li>
+            <li><strong>Th - Thinking Models:</strong> Architectures that allocate additional computation to deliberate before responding.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================
+         DIVIDER BETWEEN SECTIONS
+         ========================= -->
+    <hr class="divider">
+
+    <!-- =========================
+         SLIDES SECTION
+         ========================= -->
+    <h1 class="slides-title">AI "Reactions" — Periodic Table Chemistry</h1>
+    <div class="subtitle">
+      AI systems are not collections of buzzwords. They are repeatable combinations of a small
+      number of elements. Below are fourteen common reactions, followed by examples of when
+      those reactions are over- or under-applied.
+    </div>
+
+    <!-- =========================
+         SECTION 1
+         ========================= -->
+    <div class="section-title">1) Common AI Reactions</div>
+    <div class="section-note">
+      Each reaction includes: a symbolic formula, a plain-English description,
+      and a step-by-step explanation of how the system behaves in practice.
+    </div>
+
+    <div class="grid-two">
+
+    <!-- RETRIEVAL & KNOWLEDGE GROUP -->
+
+    <!-- 1 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">1. Production RAG (Document Chat)</p>
+        <span class="chip orchestration">Orchestration</span>
+      </div>
+      <div class="reaction">Em → Vx → Rg → Pr → Lg (+ Gr)</div>
+      <div class="reaction-text">
+        A system that answers questions using a private document corpus rather than model memory.
+      </div>
+      <ul class="steps">
+        <li>Documents are converted into embeddings that capture semantic meaning.</li>
+        <li>Embeddings are stored in a vector database optimized for similarity search.</li>
+        <li>User queries are embedded and matched against stored vectors.</li>
+        <li>The most relevant document chunks are retrieved.</li>
+        <li>Those chunks are injected into a structured prompt.</li>
+        <li>The language model generates an answer grounded in retrieved text.</li>
+        <li>Guardrails enforce safety, redaction, and output structure.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Enterprise knowledge bots, Copilot-style document assistants, BI copilots.</div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">2. Web-Augmented Search Assistant</p>
+        <span class="chip orchestration">Orchestration</span>
+      </div>
+      <div class="reaction">Pr → Fc(search) → Rg → Lg</div>
+      <div class="reaction-text">
+        A system that answers questions using live external information.
+      </div>
+      <ul class="steps">
+        <li>A user query triggers a web search tool.</li>
+        <li>Search results are fetched and filtered.</li>
+        <li>Relevant excerpts are selected.</li>
+        <li>The model synthesizes an answer with citations.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Perplexity, search copilots.</div>
+    </div>
+
+    <!-- AGENT & REACTIVE GROUP -->
+
+    <!-- 3 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">3. Agentic Loop</p>
+        <span class="chip reactive">Reactive</span>
+      </div>
+      <div class="reaction">Ag ⇄ Fc → Fw</div>
+      <div class="reaction-text">
+        A goal-driven system that plans, acts, and adapts based on tool feedback.
+      </div>
+      <ul class="steps">
+        <li>An agent receives a goal instead of a single question.</li>
+        <li>The agent decomposes the goal into actionable steps.</li>
+        <li>Tools and APIs are invoked via function calls.</li>
+        <li>Results are observed and incorporated into context.</li>
+        <li>The loop repeats until the goal is satisfied.</li>
+        <li>A framework manages state, retries, and execution flow.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Task automation agents, AI operators.</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">4. Multi-Agent Collaboration</p>
+        <span class="chip reactive">Reactive</span>
+      </div>
+      <div class="reaction">Ma ⇄ Ag ⇄ Fc</div>
+      <div class="reaction-text">
+        Multiple agents specialize and coordinate to solve complex tasks.
+      </div>
+      <ul class="steps">
+        <li>Agents take distinct roles (researcher, writer, critic).</li>
+        <li>They exchange intermediate results and context.</li>
+        <li>Tools are shared across agents.</li>
+        <li>Coordination protocols manage handoffs and consensus.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Research assistants, complex workflow automation.</div>
+    </div>
+
+    <!-- MODEL & GENERATION GROUP -->
+
+    <!-- 5 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">5. Code Assistant</p>
+        <span class="chip models">Models</span>
+      </div>
+      <div class="reaction">Ft → Pr → Lg</div>
+      <div class="reaction-text">
+        A model optimized for software development tasks inside an IDE.
+      </div>
+      <ul class="steps">
+        <li>A base model is fine-tuned on large code corpora.</li>
+        <li>Editor context (files, diffs, cursor position) is assembled.</li>
+        <li>Context is formatted into a structured prompt.</li>
+        <li>The model predicts code completions or refactors.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> GitHub Copilot, Cursor, Codeium.</div>
+    </div>
+
+    <!-- 6 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">6. Image Generation</p>
+        <span class="chip models">Models</span>
+      </div>
+      <div class="reaction">Pr → Mm → Lg</div>
+      <div class="reaction-text">
+        A multimodal generative pipeline for producing images from text.
+      </div>
+      <ul class="steps">
+        <li>A text prompt describes visual intent.</li>
+        <li>The multimodal model encodes the description.</li>
+        <li>Latent representations are iteratively refined.</li>
+        <li>An image is decoded and returned.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Midjourney, DALL·E, Stable Diffusion.</div>
+    </div>
+
+    <!-- 7 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">7. Deliberative Reasoning</p>
+        <span class="chip models">Models</span>
+      </div>
+      <div class="reaction">Pr → Th → Lg</div>
+      <div class="reaction-text">
+        Slower, deeper reasoning before answering complex questions.
+      </div>
+      <ul class="steps">
+        <li>The model allocates extra reasoning compute.</li>
+        <li>Intermediate reasoning steps are performed internally.</li>
+        <li>A final answer is produced after deliberation.</li>
+        <li>Reasoning traces may be exposed or hidden.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> OpenAI o1, complex problem-solving assistants.</div>
+    </div>
+
+    <!-- 8 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">8. On-Device Assistant</p>
+        <span class="chip models">Models</span>
+      </div>
+      <div class="reaction">Ft → Sm → Pr</div>
+      <div class="reaction-text">
+        Lightweight AI running locally for speed and privacy.
+      </div>
+      <ul class="steps">
+        <li>Models are distilled for efficiency.</li>
+        <li>Inference runs entirely on device.</li>
+        <li>Minimal prompting controls behavior.</li>
+        <li>No data leaves the device.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Apple Intelligence, on-device voice assistants.</div>
+    </div>
+
+    <!-- ORCHESTRATION & PIPELINE GROUP -->
+
+    <!-- 9 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">9. Declarative AI Pipeline</p>
+        <span class="chip orchestration">Orchestration</span>
+      </div>
+      <div class="reaction">Pi → Pr → Lg → Gr</div>
+      <div class="reaction-text">
+        A graph-based workflow that routes data through multiple AI steps without custom code.
+      </div>
+      <ul class="steps">
+        <li>A pipeline graph defines nodes (models, tools, transforms).</li>
+        <li>Data flows through edges based on declarative rules.</li>
+        <li>Each node processes input and passes output downstream.</li>
+        <li>Guardrails validate outputs at each stage.</li>
+        <li>No business logic is embedded in the pipeline itself.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> LangGraph, Prefect AI workflows, Azure ML Pipelines.</div>
+    </div>
+
+    <!-- 10 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">10. Adaptive Routing System</p>
+        <span class="chip orchestration">Orchestration</span>
+      </div>
+      <div class="reaction">Ae → Pr → Lg (+ Sm)</div>
+      <div class="reaction-text">
+        A system that dynamically selects models or execution paths based on runtime signals.
+      </div>
+      <ul class="steps">
+        <li>Incoming requests are analyzed for complexity and urgency.</li>
+        <li>Adaptive logic routes simple queries to small, fast models.</li>
+        <li>Complex queries are routed to large, capable models.</li>
+        <li>Cost, latency, and confidence thresholds guide decisions.</li>
+        <li>The system learns from feedback to improve routing.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Martian, model routers, cost-optimized inference platforms.</div>
+    </div>
+
+    <!-- VALIDATION & TRAINING GROUP -->
+
+    <!-- 11 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">11. Summarization / Extraction</p>
+        <span class="chip validation">Validation</span>
+      </div>
+      <div class="reaction">Pr → Lg → Gr</div>
+      <div class="reaction-text">
+        Converting raw content into structured or condensed form.
+      </div>
+      <ul class="steps">
+        <li>Input documents are provided directly.</li>
+        <li>The model summarizes or extracts entities.</li>
+        <li>Guardrails enforce schemas and formatting.</li>
+        <li>Output is validated against expected structure.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Contract review, meeting summaries.</div>
+    </div>
+
+    <!-- 12 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">12. Curated Knowledge Base</p>
+        <span class="chip validation">Validation</span>
+      </div>
+      <div class="reaction">Bt → Em → Vx</div>
+      <div class="reaction-text">
+        A system that maintains canonical, governed data for AI retrieval.
+      </div>
+      <ul class="steps">
+        <li>Base truth defines what data is authoritative and permitted.</li>
+        <li>Curation rules determine what can be added, updated, or removed.</li>
+        <li>Approved documents are embedded and indexed.</li>
+        <li>Access controls and retention policies are enforced.</li>
+        <li>The knowledge base serves as the source for RAG systems.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Enterprise knowledge management, compliance-aware document stores.</div>
+    </div>
+
+    <!-- 13 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">13. Safety Hardening</p>
+        <span class="chip validation">Validation</span>
+      </div>
+      <div class="reaction">Rt → Gr → In</div>
+      <div class="reaction-text">
+        Stress-testing and securing AI behavior through adversarial methods.
+      </div>
+      <ul class="steps">
+        <li>Red teams probe failure modes and vulnerabilities.</li>
+        <li>Guardrails are strengthened based on findings.</li>
+        <li>Interpretability tools explain failures and edge cases.</li>
+        <li>The system is iteratively hardened.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Model safety testing, AI security platforms.</div>
+    </div>
+
+    <!-- 14 -->
+    <div class="card">
+      <div class="card-header">
+        <p class="card-title">14. Synthetic-Data Training</p>
+        <span class="chip retrieval">Retrieval</span>
+      </div>
+      <div class="reaction">Sy → Ft → Sm</div>
+      <div class="reaction-text">
+        Using AI-generated data to adapt or compress models.
+      </div>
+      <ul class="steps">
+        <li>Synthetic examples are generated by large models.</li>
+        <li>Models are fine-tuned on augmented data.</li>
+        <li>Smaller specialized models are distilled.</li>
+        <li>Performance is validated against real-world benchmarks.</li>
+      </ul>
+      <div class="products"><span class="label">Products:</span> Domain-specific assistants, distilled models.</div>
+    </div>
+
+    </div>
+
+    <!-- =========================
+         SECTION 2
+         ========================= -->
+    <div class="section-title">2) Over-Engineering vs Minimal Viable</div>
+    <div class="section-note">
+      These examples contrast a common *over-engineered* AI architecture with a *minimal viable reaction*.
+      Each starts by describing why teams often overbuild the solution, then explains why the simpler
+      reaction is usually superior.
+    </div>
+
+    <div class="grid-one">
+
+      <!-- OPTION A -->
+      <div class="card border-slate" style="grid-column: span 6;">
+        <div class="card-header">
+          <p class="card-title">A. Internal FAQ / Documentation Bot</p>
+          <span class="chip validation">Validation</span>
+        </div>
+
+        <p class="reaction-text">
+          <span class="label">Over-engineered approach:</span>
+          Teams often treat an internal FAQ bot as a "smart assistant" that must reason, plan,
+          and autonomously decide how to answer questions. This leads to agent loops, tool calls,
+          and even reasoning models layered on top of what is fundamentally a retrieval problem.
+          The system becomes harder to debug, slower to respond, and more fragile—despite the
+          task being static document lookup.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box">
+            <p class="compare-title">Over-engineered</p>
+            <div class="reaction">Em → Vx → Rg → Ag → Fc → Fw → Th → Gr</div>
+            <ul class="steps">
+              <li>Agent plans how to answer each question.</li>
+              <li>Tools and loops introduce latency.</li>
+              <li>Reasoning models increase cost without improving grounding.</li>
+            </ul>
+          </div>
+
+          <div class="compare-box">
+            <p class="compare-title">Minimal viable</p>
+            <div class="reaction">Em → Vx → Rg → Lg (+ Gr)</div>
+            <ul class="steps">
+              <li>Retrieve the most relevant documents.</li>
+              <li>Generate a grounded answer directly.</li>
+              <li>Apply safety and access controls.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="why">
+          <span class="label">Why minimal wins:</span>
+          The problem is deterministic retrieval, not autonomy. Adding agents does not improve
+          correctness and actively harms reliability.
+        </p>
+      </div>
+
+      <!-- OPTION B -->
+      <div class="card border-slate" style="grid-column: span 6;">
+        <div class="card-header">
+          <p class="card-title">B. IDE Code Autocomplete</p>
+          <span class="chip models">Models</span>
+        </div>
+
+        <p class="reaction-text">
+          <span class="label">Over-engineered approach:</span>
+          Some teams attempt to treat code completion as a planning task, adding retrieval
+          systems, agent orchestration, and tool calls. This often stems from fear that the model
+          "won't understand enough context." In practice, this breaks the tight latency
+          requirements of developer workflows.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box">
+            <p class="compare-title">Over-engineered</p>
+            <div class="reaction">Ft → Rg → Vx → Ag → Fc → Lg</div>
+            <ul class="steps">
+              <li>Searches the codebase for context.</li>
+              <li>Agent reasons about edits.</li>
+              <li>Multiple hops slow feedback loops.</li>
+            </ul>
+          </div>
+
+          <div class="compare-box">
+            <p class="compare-title">Minimal viable</p>
+            <div class="reaction">Ft → Pr → Lg</div>
+            <ul class="steps">
+              <li>Use a strong code-tuned model.</li>
+              <li>Inject local editor context.</li>
+              <li>Predict the next token immediately.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="why">
+          <span class="label">Why minimal wins:</span>
+          Autocomplete is a real-time prediction problem. Local context plus a capable model
+          outperforms any multi-step orchestration.
+        </p>
+      </div>
+
+      <!-- OPTION C -->
+      <div class="card border-slate" style="grid-column: span 6;">
+        <div class="card-header">
+          <p class="card-title">C. Image Captioning / Visual Description</p>
+          <span class="chip orchestration">Orchestration</span>
+        </div>
+
+        <p class="reaction-text">
+          <span class="label">Over-engineered approach:</span>
+          Teams sometimes wrap simple perception tasks in agents and retrieval pipelines,
+          assuming the system must "think" about the image. This adds orchestration layers
+          despite the model already having all required inputs at inference time.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box">
+            <p class="compare-title">Over-engineered</p>
+            <div class="reaction">Pr → Mm → Ag → Fc → Rg → Lg → Gr</div>
+            <ul class="steps">
+              <li>Agent decides how to interpret the image.</li>
+              <li>Retrieval adds irrelevant context.</li>
+              <li>Extra layers introduce failure modes.</li>
+            </ul>
+          </div>
+
+          <div class="compare-box">
+            <p class="compare-title">Minimal viable</p>
+            <div class="reaction">Pr → Mm → Lg</div>
+            <ul class="steps">
+              <li>Encode the image.</li>
+              <li>Condition generation on visual features.</li>
+              <li>Produce a caption directly.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="why">
+          <span class="label">Why minimal wins:</span>
+          Image captioning is a single-shot perception task. Orchestration does not increase
+          understanding—it only increases complexity.
+        </p>
+      </div>
+
+    </div>
+
+    <footer>
+      <div class="footer-left">
+        Adapted from <a href="https://www.youtube.com/watch?v=ESBMgZHzfG0" target="_blank" rel="noopener noreferrer">IBM Technology's Periodic Table of AI Elements</a>
+      </div>
+      <div class="footer-right">
+        Conceptual framework for understanding AI system architecture
+      </div>
+    </footer>
+  </div>
+
+  <!-- =========================
+       JS SECTION
+       ========================= -->
+  <script>
+    // Toggle collapsible sections
+    function toggleSection(sectionId) {
+      const content = document.getElementById(sectionId);
+      const icon = document.getElementById(sectionId + '-icon');
+
+      if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        icon.classList.remove('expanded');
+      } else {
+        content.classList.add('expanded');
+        icon.classList.add('expanded');
+      }
+    }
+
+    // Reserved for future enhancements:
+    // - interactive highlighting
+    // - reaction walkthroughs
+  </script>
+</body>
+</html>
+
+
+
+
+
+
